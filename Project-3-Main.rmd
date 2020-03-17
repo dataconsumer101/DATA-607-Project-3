@@ -57,6 +57,7 @@ for (desc in df$Description) {
 }
 #Gets rid of the descriptions
 df$Description <- NULL
+
 #Gather soft skills
 df2 <- df[,c(1, 44:ncol(df))] %>%
   gather(skill, flag, -X) %>%
@@ -65,14 +66,6 @@ df2 <- df[,c(1, 44:ncol(df))] %>%
   mutate(skill_type = 'soft')
 ```
 
-```{r}
-#Gather soft skills
-df2 <- df[,c(1, 44:ncol(df))] %>%
-  gather(skill, flag, -X) %>%
-  filter(flag == 1) %>%
-  select(id = X, skill) %>%
-  mutate(skill_type = 'soft')
-```
 
 
 ### Hard Skills
@@ -103,7 +96,11 @@ sdf$skill <- str_replace_all(sdf$skill, '"', "")
 sdf$skill <- str_trim(sdf$skill)
 
 sdf$skill_type <- 'hard'
+```
 
+### Skills Table
+
+```{r}
 # Combine skills
 skills <- bind_rows(df2, sdf)
 ```
@@ -149,14 +146,17 @@ for (i in 1: nrow(job.indeed.df)) {
 #          max.words=10, random.order=FALSE, rot.per=0.35,
 #          colors=brewer.pal(8, "Dark2"))
 # Add job title flags to original dataframe
+```
 
 
+## Hard Skills Visualizations
+
+```{r}
 # Merging with main Analysis Data Frame:
 
 df_all <- left_join(df_raw[,1:16], final.data.df[,-2], by = c('X' = 'Id'))
 
 names(df_all)[1] <- 'job_id'
-
 
 
 # hard skills dataframe for visualizations
